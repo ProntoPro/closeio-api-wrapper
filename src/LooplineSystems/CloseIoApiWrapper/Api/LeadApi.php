@@ -28,7 +28,8 @@ class LeadApi extends AbstractApi
         $this->urls = [
             'get-leads' => '/lead/',
             'add-lead' => '/lead/',
-            'get-lead' => '/lead/[:id]/',
+            'get-lead-id' => '/lead/[:id]/',
+            'get-lead-query' => '/lead/',
             'update-lead' => '/lead/[:id]/',
             'delete-lead' => '/lead/[:id]/'
         ];
@@ -37,12 +38,21 @@ class LeadApi extends AbstractApi
     /**
      * @return Lead[]
      */
-    public function getAllLeads()
+    public function getAllLeads($limit = null, $skip = null, $filters = [])
     {
         /** @var Lead[] $leads */
         $leads = array();
 
-        $apiRequest = $this->prepareRequest('get-leads');
+        $query = [];
+        if (!is_null($limit)) {
+            $query['_limit'] = $limit;
+        }
+        if (!is_null($skip)) {
+            $query['_skip'] = $skip;
+        }
+        $query = array_merge($filters, $query);
+
+        $apiRequest = $this->prepareRequest('get-leads', null, [], array_filter($query));
 
         /** @var CloseIoResponse $result */
         $result = $this->triggerGet($apiRequest);
@@ -62,15 +72,43 @@ class LeadApi extends AbstractApi
      * @return Lead
      * @throws ResourceNotFoundException
      */
-    public function getLead($id)
+    public function getLeadFromId($id)
     {
-        $apiRequest = $this->prepareRequest('get-lead', null, ['id' => $id]);
+        $apiRequest = $this->prepareRequest('get-lead-id', null, ['id' => $id]);
 
         /** @var CloseIoResponse $result */
         $result = $this->triggerGet($apiRequest);
 
         if ($result->getReturnCode() == 200 && ($result->getData() !== null)) {
             $lead = new Lead($result->getData());
+        } else {
+            throw new ResourceNotFoundException();
+        }
+        return $lead;
+    }
+
+    /**
+     * @param array $query
+     * @return Lead
+     * @throws ResourceNotFoundException
+     */
+    public function getLeadFromQuery(array $query)
+    {
+        $query = array_merge($query, [
+            '_limit' => 1,
+        ]);
+
+        $apiRequest = $this->prepareRequest('get-lead-query', null, [], $query);
+
+        /** @var CloseIoResponse $result */
+        $result = $this->triggerGet($apiRequest);
+
+        if ($result->getReturnCode() == 200
+            && ($result->getData() !== null)
+            && (in_array('data', $result->getData()))
+            && (!empty($result->getData()['data']))
+        ) {
+            $lead = new Lead($result->getData()['data'][0]);
         } else {
             throw new ResourceNotFoundException();
         }

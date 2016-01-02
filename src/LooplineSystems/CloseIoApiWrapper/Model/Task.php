@@ -86,6 +86,12 @@ class Task implements \JsonSerializable
      * @var string
      */
     private $lead_id;
+
+    /**
+     * @var string
+     */
+    private $object_type;
+
     /**
      * @var string
      */
@@ -323,6 +329,22 @@ class Task implements \JsonSerializable
     public function setUpdatedByName($updated_by_name)
     {
         $this->updated_by_name = $updated_by_name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectType()
+    {
+        return $this->object_type;
+    }
+
+    /**
+     * @param string $object_type
+     */
+    public function setObjectType($object_type)
+    {
+        $this->object_type = $object_type;
     }
 
     /**
