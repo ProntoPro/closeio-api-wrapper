@@ -90,12 +90,32 @@ class Task implements \JsonSerializable
     /**
      * @var string
      */
+    private $type;
+
+    /**
+     * @var string
+     */
+    private $object_id;
+
+    /**
+     * @var string
+     */
     private $object_type;
 
     /**
      * @var string
      */
+    private $date;
+
+    /**
+     * @var string
+     */
     private $date_created;
+
+    /**
+     * @var string
+     */
+    private $view;
 
     /**
      * @param array $data
@@ -286,6 +306,54 @@ class Task implements \JsonSerializable
     /**
      * @return string
      */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectId()
+    {
+        return $this->object_id;
+    }
+
+    /**
+     * @param string $object_id
+     */
+    public function setObjectId($object_id)
+    {
+        $this->object_id = $object_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param string $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    }
+
+    /**
+     * @return string
+     */
     public function getOrganizationId()
     {
         return $this->organization_id;
@@ -361,5 +429,21 @@ class Task implements \JsonSerializable
     public function setDateCreated($date_created)
     {
         $this->date_created = $date_created;
+    }
+
+    /**
+     * @return string
+     */
+    public function getView()
+    {
+        return $this->view;
+    }
+
+    /**
+     * @param string $view
+     */
+    public function setView($view)
+    {
+        $this->view = $view;
     }
 }

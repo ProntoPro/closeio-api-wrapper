@@ -72,6 +72,7 @@ abstract class AbstractApi implements ApiInterface
     protected function triggerPut(CloseIoRequest $request)
     {
         $finalRequest = $this->finalizeRequest($request, Curl::METHOD_PUT);
+
         return $this->curl->getResponse($finalRequest);
     }
 
@@ -83,6 +84,7 @@ abstract class AbstractApi implements ApiInterface
     protected function triggerDelete(CloseIoRequest $request)
     {
         $finalRequest = $this->finalizeRequest($request, Curl::METHOD_DELETE);
+
         return $this->curl->getResponse($finalRequest);
     }
 
@@ -94,6 +96,7 @@ abstract class AbstractApi implements ApiInterface
     protected function triggerPatch(CloseIoRequest $request)
     {
         $finalRequest = $this->finalizeRequest($request, Curl::METHOD_PATCH);
+
         return $this->curl->getResponse($finalRequest);
     }
 
@@ -105,6 +108,7 @@ abstract class AbstractApi implements ApiInterface
     protected function triggerGet(CloseIoRequest $request)
     {
         $finalRequest = $this->finalizeRequest($request, Curl::METHOD_GET);
+
         return $this->curl->getResponse($finalRequest);
     }
 
@@ -116,6 +120,7 @@ abstract class AbstractApi implements ApiInterface
     protected function triggerPost(CloseIoRequest $request)
     {
         $finalRequest = $this->finalizeRequest($request, Curl::METHOD_POST);
+
         return $this->curl->getResponse($finalRequest);
     }
 
@@ -127,6 +132,7 @@ abstract class AbstractApi implements ApiInterface
     private function finalizeRequest(CloseIoRequest $request, $method)
     {
         $request->setMethod($method);
+
         return $request;
     }
 
@@ -152,6 +158,7 @@ abstract class AbstractApi implements ApiInterface
         foreach ($replacements as $parameter => $value) {
             $url = $this->prepareUrlSingle($parameter, $value, $url);
         }
+
         return $url;
     }
 
@@ -176,6 +183,7 @@ abstract class AbstractApi implements ApiInterface
         }
 
         $this->apiRequest->setUrl($this->getUrlPrefix() . $url);
+
         return $this->apiRequest;
     }
 

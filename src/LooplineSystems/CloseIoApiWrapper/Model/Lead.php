@@ -29,12 +29,12 @@ class Lead implements \JsonSerializable
      */
     private $id;
 
-    /*
+    /**
      * @var string
      */
     private $status_id;
 
-    /*
+    /**
      * @var string
      */
     private $status_label;
@@ -134,6 +134,11 @@ class Lead implements \JsonSerializable
      */
     public function __construct(array $data = null)
     {
+        $this->addresses = [];
+        $this->tasks = [];
+        $this->contacts = [];
+        $this->opportunities = [];
+
         if ($data) {
             // custom is not a class and should be set separately
             if (isset($data['custom'])){
@@ -181,7 +186,7 @@ class Lead implements \JsonSerializable
     }
     
     /**
-     * @param Address[] $addresses
+     * @param Address[]|null $addresses
      */
     public function setAddresses(array $addresses)
     {
@@ -398,16 +403,18 @@ class Lead implements \JsonSerializable
 
     /**
      * @param $url
-     * @throws InvalidUrlException
      */
     public function setUrl($url)
     {
-        // validate url
-        if (filter_var($url, FILTER_VALIDATE_URL)){
-            $this->url = $url;
-        } else {
-            throw new InvalidUrlException('"' . $url . '" is not a valid URL');
-        }
+        $this->url = $url;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isUrlValid()
+    {
+        return false !== filter_var($this->url, FILTER_VALIDATE_URL);
     }
 
     /**

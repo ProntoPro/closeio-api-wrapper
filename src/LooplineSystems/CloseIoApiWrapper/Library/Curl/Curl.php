@@ -46,6 +46,27 @@ class Curl
     }
 
     /**
+     * @param $curlHandler
+     * @return CloseIoResponse
+     */
+    private function execute($curlHandler)
+    {
+        $result = curl_exec($curlHandler);
+
+        $curlInfo = curl_getinfo($curlHandler);
+        $lastHttpCode = $curlInfo['http_code'];
+        curl_close($curlHandler);
+
+        $response = new CloseIoResponse();
+        $response->setReturnCode($lastHttpCode);
+        $response->setRawData($result);
+        $response->setData(json_decode($result, true));
+        $response->setCurlInfoRaw($curlInfo);
+
+        return $response;
+    }
+
+    /**
      * @param CloseIoRequest $request
      * @return CloseIoResponse
      * @throws BadApiRequestException
@@ -67,26 +88,5 @@ class Curl
         } else {
             return $response;
         }
-    }
-
-    /**
-     * @param $curlHandler
-     * @return CloseIoResponse
-     */
-    public function execute($curlHandler)
-    {
-        $result = curl_exec($curlHandler);
-
-        $curlInfo = curl_getinfo($curlHandler);
-        $lastHttpCode = $curlInfo['http_code'];
-        curl_close($curlHandler);
-
-        $response = new CloseIoResponse();
-        $response->setReturnCode($lastHttpCode);
-        $response->setRawData($result);
-        $response->setData(json_decode($result, true));
-        $response->setCurlInfoRaw($curlInfo);
-
-        return $response;
     }
 }

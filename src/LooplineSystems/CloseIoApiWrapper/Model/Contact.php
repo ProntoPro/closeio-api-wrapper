@@ -78,6 +78,10 @@ class Contact implements \JsonSerializable
      */
     public function __construct(array $data = null)
     {
+        $this->urls = [];
+        $this->phones = [];
+        $this->emails = [];
+
         if ($data) {
             $this->hydrate($data, ['phones', 'emails', 'urls']);
         }

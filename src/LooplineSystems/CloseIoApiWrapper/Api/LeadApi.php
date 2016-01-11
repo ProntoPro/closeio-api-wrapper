@@ -9,8 +9,11 @@
 
 namespace LooplineSystems\CloseIoApiWrapper\Api;
 
+use LooplineSystems\CloseIoApiWrapper\CloseIoRequest;
 use LooplineSystems\CloseIoApiWrapper\CloseIoResponse;
 use LooplineSystems\CloseIoApiWrapper\Library\Api\AbstractApi;
+use LooplineSystems\CloseIoApiWrapper\Library\Curl\Curl;
+use LooplineSystems\CloseIoApiWrapper\Library\Curl\ParallelCurl;
 use LooplineSystems\CloseIoApiWrapper\Library\Exception\InvalidNewLeadPropertyException;
 use LooplineSystems\CloseIoApiWrapper\Library\Exception\InvalidParamException;
 use LooplineSystems\CloseIoApiWrapper\Model\Lead;
@@ -125,7 +128,33 @@ class LeadApi extends AbstractApi
 
         $lead = json_encode($lead);
         $apiRequest = $this->prepareRequest('add-lead', $lead);
+
         return $this->triggerPost($apiRequest);
+    }
+
+    /**
+     * @param Lead[] $leads
+     *
+     * @return CloseIoResponse[]
+     */
+    public function addLeads(array $leads)
+    {
+        /** @var CloseIoRequest[] $requests */
+        $requests = [];
+
+        foreach ($leads as $lead) {
+            $this->validateLeadForPost($lead);
+
+            $lead = json_encode($lead);
+            $request = clone $this->prepareRequest('add-lead', $lead);
+            $request->setMethod(Curl::METHOD_POST);
+
+            $requests[] = $request;
+        }
+
+        $parallelCurl = new ParallelCurl();
+
+        return $parallelCurl->getResponses($requests);
     }
 
     /**

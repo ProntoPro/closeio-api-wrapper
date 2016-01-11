@@ -1,11 +1,11 @@
 <?php
 /**
-* Close.io Api Wrapper - LLS Internet GmbH - Loopline Systems
-*
-* @link      https://github.com/loopline-systems/closeio-api-wrapper for the canonical source repository
-* @copyright Copyright (c) 2014 LLS Internet GmbH - Loopline Systems (http://www.loopline-systems.com)
-* @license   https://github.com/loopline-systems/closeio-api-wrapper/blob/master/LICENSE (MIT Licence)
-*/
+ * Close.io Api Wrapper - LLS Internet GmbH - Loopline Systems
+ *
+ * @link      https://github.com/loopline-systems/closeio-api-wrapper for the canonical source repository
+ * @copyright Copyright (c) 2014 LLS Internet GmbH - Loopline Systems (http://www.loopline-systems.com)
+ * @license   https://github.com/loopline-systems/closeio-api-wrapper/blob/master/LICENSE (MIT Licence)
+ */
 
 namespace LooplineSystems\CloseIoApiWrapper\Model;
 
@@ -136,6 +136,11 @@ class Opportunity implements \JsonSerializable
      * @var string
      */
     private $value;
+
+    /**
+     * @var string
+     */
+    private $value_formatted;
 
     /**
      * @var string
@@ -507,6 +512,22 @@ class Opportunity implements \JsonSerializable
     public function setValue($value)
     {
         $this->value = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValueFormatted()
+    {
+        return $this->value_formatted;
+    }
+
+    /**
+     * @param string $value_formatted
+     */
+    public function setValueFormatted($value_formatted)
+    {
+        $this->value_formatted = $value_formatted;
     }
 
     /**
