@@ -179,6 +179,14 @@ abstract class AbstractApi implements ApiInterface
         $url = $this->prepareUrlForKey($urlKey, $urlReplacements);
 
         if (!empty($queryParams)) {
+            if (isset($queryParams['query'])) {
+                array_walk($queryParams['query'], function (&$item, $key) {
+                    $item = $key . ':"' . $item . '"';
+                });
+
+                $queryParams['query'] = implode(' ', $queryParams['query']);
+            }
+
             $url .= '?' . http_build_query($queryParams);
         }
 

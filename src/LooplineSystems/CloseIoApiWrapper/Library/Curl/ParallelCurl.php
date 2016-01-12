@@ -45,10 +45,19 @@ class ParallelCurl
         /** @var CloseIoResponse $responses */
         $responses = [];
 
-        $running = null;
+        $active = null;
+        $mrc = null;
         do {
-            curl_multi_exec($multiHandle, $running);
-        } while($running > 0);
+            $mrc = curl_multi_exec($multiHandle, $active);
+        } while($mrc == CURLM_CALL_MULTI_PERFORM);
+
+        while ($active && $mrc == CURLM_OK) {
+            if (curl_multi_select($multiHandle) != -1) {
+                do {
+                    $mrc = curl_multi_exec($multiHandle, $active);
+                } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+            }
+        }
 
         foreach($curlHandlers as $id => $curlHandler) {
             $result = curl_multi_getcontent($curlHandler);

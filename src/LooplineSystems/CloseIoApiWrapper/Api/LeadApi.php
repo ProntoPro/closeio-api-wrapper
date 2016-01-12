@@ -14,8 +14,10 @@ use LooplineSystems\CloseIoApiWrapper\CloseIoResponse;
 use LooplineSystems\CloseIoApiWrapper\Library\Api\AbstractApi;
 use LooplineSystems\CloseIoApiWrapper\Library\Curl\Curl;
 use LooplineSystems\CloseIoApiWrapper\Library\Curl\ParallelCurl;
+use LooplineSystems\CloseIoApiWrapper\Library\Exception\BadApiRequestException;
 use LooplineSystems\CloseIoApiWrapper\Library\Exception\InvalidNewLeadPropertyException;
 use LooplineSystems\CloseIoApiWrapper\Library\Exception\InvalidParamException;
+use LooplineSystems\CloseIoApiWrapper\Library\Exception\UrlNotSetException;
 use LooplineSystems\CloseIoApiWrapper\Model\Lead;
 use LooplineSystems\CloseIoApiWrapper\Library\Exception\ResourceNotFoundException;
 
@@ -34,28 +36,34 @@ class LeadApi extends AbstractApi
             'get-lead-id' => '/lead/[:id]/',
             'get-lead-query' => '/lead/',
             'update-lead' => '/lead/[:id]/',
-            'delete-lead' => '/lead/[:id]/'
+            'delete-lead' => '/lead/[:id]/',
         ];
     }
 
     /**
-     * @return Lead[]
+     * @param null  $limit
+     * @param null  $skip
+     * @param array $query
+     *
+     * @return \LooplineSystems\CloseIoApiWrapper\Model\Lead[]
      */
-    public function getAllLeads($limit = null, $skip = null, $filters = [])
+    public function getAllLeads($limit = null, $skip = null, array $query = [])
     {
         /** @var Lead[] $leads */
         $leads = array();
 
-        $query = [];
-        if (!is_null($limit)) {
-            $query['_limit'] = $limit;
+        $filters = [];
+        if (!empty($limit)) {
+            $filters['_limit'] = $limit;
         }
-        if (!is_null($skip)) {
-            $query['_skip'] = $skip;
+        if (!empty($skip)) {
+            $filters['_skip'] = $skip;
         }
-        $query = array_merge($filters, $query);
+        if (!empty($query)) {
+            $filters['query'] = $query;
+        }
 
-        $apiRequest = $this->prepareRequest('get-leads', null, [], array_filter($query));
+        $apiRequest = $this->prepareRequest('get-leads', null, [], $filters);
 
         /** @var CloseIoResponse $result */
         $result = $this->triggerGet($apiRequest);
@@ -166,7 +174,7 @@ class LeadApi extends AbstractApi
     public function updateLead(Lead $lead)
     {
         // check if lead has id
-        if ($lead->getId() == null) {
+        if (empty($lead->getId())) {
             throw new InvalidParamException('When updating a lead you must provide the lead ID');
         }
         // remove id from lead since it won't be part of the patch data
@@ -184,6 +192,55 @@ class LeadApi extends AbstractApi
             throw new ResourceNotFoundException();
         }
         return $lead;
+    }
+
+    /**
+     * @param Lead[] $leads
+     *
+     * @return Lead[]
+     * @throws InvalidParamException
+     * @throws ResourceNotFoundException
+     * @throws BadApiRequestException
+     * @throws UrlNotSetException
+     */
+    public function updateLeads(array $leads)
+    {
+        /** @var CloseIoRequest[] $requests */
+        $requests = [];
+
+        foreach ($leads as $lead) {
+            // check if lead has id
+            if (empty($lead->getId())) {
+                throw new InvalidParamException('When updating a lead you must provide the lead ID');
+            }
+            // remove id from lead since it won't be part of the patch data
+            $id = $lead->getId();
+            $lead->setId(null);
+
+            $lead = json_encode($lead);
+            $request = clone $this->prepareRequest('update-lead', $lead, ['id' => $id]);
+            $request->setMethod(Curl::METHOD_PUT);
+
+            $requests[] = $request;
+        }
+
+        $parallelCurl = new ParallelCurl();
+
+        $responses = $parallelCurl->getResponses($requests);
+
+        /** @var Lead[] $leads */
+        $leads = [];
+        foreach ($responses as $response) {
+            // return Lead object if successful
+            if ($response->getReturnCode() == 200 && ($response->getData() !== null)) {
+                $lead = new Lead($response->getData());
+            } else {
+                throw new ResourceNotFoundException();
+            }
+            $leads[] = $lead;
+        }
+
+        return $leads;
     }
 
     /**
