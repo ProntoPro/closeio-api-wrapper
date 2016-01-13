@@ -16,19 +16,24 @@ class BadApiRequestException extends \Exception {
      */
     public function __construct(array $allErrors)
     {
-        $output = '';
-        foreach ($allErrors as $type => $errorsByType){
-            if (! empty ($errorsByType)) {
-                if (is_array($errorsByType)) {
-                    $output .= $type . ' : ' .PHP_EOL;
-                    foreach ($errorsByType as $key => $error){
-                        $output .= $key . ' => ' . $error . PHP_EOL;
-                    }
+        $output = json_encode($this->getFilteredErrors($allErrors));
+
+        parent::__construct('Api request returned errors. ' . PHP_EOL . $output);
+    }
+
+    private function getFilteredErrors(array $aggregate)
+    {
+        $errors = [];
+        foreach ($aggregate as $type => $error) {
+            if (!empty($error)) {
+                if (is_array($error)) {
+                    $errors[$type] = $this->getFilteredErrors($error);
                 } else {
-                    $output .= $type . ' : ' . $errorsByType;
+                    $errors[$type] = $error;
                 }
             }
         }
-        parent::__construct('Api request returned errors. ' . PHP_EOL . $output);
+
+        return $errors;
     }
 } 

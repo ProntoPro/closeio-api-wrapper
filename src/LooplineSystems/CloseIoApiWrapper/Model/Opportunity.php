@@ -148,6 +148,11 @@ class Opportunity implements \JsonSerializable
     private $value_currency;
 
     /**
+     * @var string
+     */
+    private $contact_name;
+
+    /**
      * @param array $data
      */
     public function __construct(array $data = null)
@@ -544,5 +549,21 @@ class Opportunity implements \JsonSerializable
     public function setValueCurrency($value_currency)
     {
         $this->value = $value_currency;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactName()
+    {
+        return $this->contact_name;
+    }
+
+    /**
+     * @param string $contact_name
+     */
+    public function setContactName($contact_name)
+    {
+        $this->contact_name = $contact_name;
     }
 }
