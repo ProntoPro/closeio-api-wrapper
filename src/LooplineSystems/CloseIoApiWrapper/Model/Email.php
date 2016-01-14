@@ -58,11 +58,12 @@ class Email implements \JsonSerializable
      */
     public function setEmail($email)
     {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidParamException('Invalid email format');
-        } else {
-            $this->email = $email;
-        }
+        $this->email = $email;
+    }
+
+    public function isEmailValid()
+    {
+        return false !== filter_var($this->email, FILTER_VALIDATE_EMAIL);
     }
 
     /**
