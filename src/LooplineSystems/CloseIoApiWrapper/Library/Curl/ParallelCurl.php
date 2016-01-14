@@ -48,7 +48,6 @@ class ParallelCurl
         $active = null;
         $mrc = null;
         do {
-            echo ($mrc === CURLM_CALL_MULTI_PERFORM)?'A':'B';
             $mrc = curl_multi_exec($multiHandle, $active);
         } while($mrc == CURLM_CALL_MULTI_PERFORM);
 
