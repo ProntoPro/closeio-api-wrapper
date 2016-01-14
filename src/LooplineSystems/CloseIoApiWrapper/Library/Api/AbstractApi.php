@@ -180,23 +180,14 @@ abstract class AbstractApi implements ApiInterface
 
         if (!empty($queryParams)) {
             if (isset($queryParams['query'])) {
-                array_walk($queryParams['query'], function (&$item, $key) {
-                    if (is_array($item)) {
-                        $conjunction = key($item);
-                        $expr = [];
-                        foreach ($item[$conjunction] as $field) {
-                            $expr[] = $key . ':"' . $field . '"';
-                        }
-                        
-                        $item = implode(' ' . $conjunction . ' ', $expr);
-                    } else {
+                if (is_array($queryParams['query'])) {
+                    array_walk($queryParams['query'], function (&$item, $key) {
                         $item = $key . ':"' . $item . '"';
-                    }
-                });
+                    });
 
-                $queryParams['query'] = implode(' ', $queryParams['query']);
+                    $queryParams['query'] = implode(' ', $queryParams['query']);
+                }
             }
-
             $url .= '?' . http_build_query($queryParams);
         }
 

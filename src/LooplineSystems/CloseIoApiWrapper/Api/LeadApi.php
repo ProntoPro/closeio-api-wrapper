@@ -41,13 +41,13 @@ class LeadApi extends AbstractApi
     }
 
     /**
-     * @param null  $limit
-     * @param null  $skip
-     * @param array $query
+     * @param null         $limit
+     * @param null         $skip
+     * @param array|string $query
      *
      * @return \LooplineSystems\CloseIoApiWrapper\Model\Lead[]
      */
-    public function getAllLeads($limit = null, $skip = null, array $query = [])
+    public function getAllLeads($limit = null, $skip = null, $query = null)
     {
         /** @var Lead[] $leads */
         $leads = array();
