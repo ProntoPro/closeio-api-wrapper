@@ -191,6 +191,7 @@ class LeadApi extends AbstractApi
         } else {
             throw new ResourceNotFoundException();
         }
+
         return $lead;
     }
 

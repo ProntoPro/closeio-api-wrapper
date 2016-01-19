@@ -11,6 +11,7 @@ namespace LooplineSystems\CloseIoApiWrapper;
 
 use LooplineSystems\CloseIoApiWrapper\Api\LeadApi;
 use LooplineSystems\CloseIoApiWrapper\Api\OpportunityApi;
+use LooplineSystems\CloseIoApiWrapper\Api\StatusApi;
 use LooplineSystems\CloseIoApiWrapper\Library\Api\ApiHandler;
 
 define('CLOSE_IO_APP_ROOT', realpath(__DIR__) . '/');
@@ -45,6 +46,7 @@ class CloseIoApiWrapper
         $apiHandler = new ApiHandler($config);
         $apiHandler->setApi(new LeadApi($apiHandler));
         $apiHandler->setApi(new OpportunityApi($apiHandler));
+        $apiHandler->setApi(new StatusApi($apiHandler));
 
         return $apiHandler;
     }
@@ -65,6 +67,15 @@ class CloseIoApiWrapper
     public function getOpportunityApi()
     {
         return $this->apiHandler->getApi(OpportunityApi::NAME);
+    }
+
+    /**
+     * @return StatusApi
+     * @throws Library\Exception\ApiNotFoundException
+     */
+    public function getStatusApi()
+    {
+        return $this->apiHandler->getApi(StatusApi::NAME);
     }
 
     /**
