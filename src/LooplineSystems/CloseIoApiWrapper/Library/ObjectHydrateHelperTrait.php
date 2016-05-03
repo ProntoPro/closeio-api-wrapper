@@ -44,7 +44,7 @@ trait ObjectHydrateHelperTrait
                         $this->$method_mapper[$setter]($value);
                     } else {
                         // trying to set a value for a non-property
-                        throw new UndefinedMethodException(get_class($this).'::'.$setter);
+//                        throw new UndefinedMethodException(get_class($this).'::'.$setter);
                     }
                 }
             } else {
