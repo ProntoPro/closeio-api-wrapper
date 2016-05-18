@@ -53,6 +53,7 @@ class CloseIoApiWrapper
         $apiHandler->setApi(new OpportunityApi($apiHandler));
         $apiHandler->setApi(new StatusApi($apiHandler));
         $apiHandler->setApi(new OpportunityStatusApi($apiHandler));
+        $apiHandler->setApi(new ActivityApi($apiHandler));
 
         return $apiHandler;
     }
@@ -100,6 +101,15 @@ class CloseIoApiWrapper
     public function getOpportunityStatusApi()
     {
         return $this->apiHandler->getApi(OpportunityStatusApi::NAME);
+    }
+
+    /**
+     * @return OpportunityStatusApi
+     * @throws Library\Exception\ApiNotFoundException
+     */
+    public function getActivityApi()
+    {
+        return $this->apiHandler->getApi(ActivityApi::NAME);
     }
 
     /**
