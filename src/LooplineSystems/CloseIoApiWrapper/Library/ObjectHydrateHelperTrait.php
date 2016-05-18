@@ -16,7 +16,6 @@ use Zend\Filter\Word\UnderscoreToCamelCase;
 
 trait ObjectHydrateHelperTrait
 {
-
     /**
      * @param array $data
      * @param array $nestedObjects
@@ -36,6 +35,18 @@ trait ObjectHydrateHelperTrait
                 // get setter method for each key in data
                 $filter = new UnderscoreToCamelCase();
                 $setter = 'set' . $filter->filter($key);
+
+                $reflection = new \ReflectionClass($this);
+                if ($reflection->hasProperty($key)) {
+                    $property = $reflection->getProperty($key);
+                    $annotations = $property->getDocComment();
+                    if (preg_match('/@var\s+\\\?DateTime\b/m', $annotations)) {
+                        try {
+                            $value = new \DateTime($value);
+                        } catch (\Exception $e) {}
+                    }
+                }
+
                 if (method_exists($this, $setter)) {
                     $this->$setter($value);
                 } else {
