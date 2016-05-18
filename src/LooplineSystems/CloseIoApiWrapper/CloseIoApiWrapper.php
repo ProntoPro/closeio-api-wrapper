@@ -9,6 +9,7 @@
 
 namespace LooplineSystems\CloseIoApiWrapper;
 
+use LooplineSystems\CloseIoApiWrapper\Api\ActivityApi;
 use LooplineSystems\CloseIoApiWrapper\Api\LeadApi;
 use LooplineSystems\CloseIoApiWrapper\Api\OpportunityApi;
 use LooplineSystems\CloseIoApiWrapper\Api\OpportunityStatusApi;

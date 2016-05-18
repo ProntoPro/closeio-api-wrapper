@@ -48,7 +48,7 @@ class OpportunityStatusApi extends AbstractApi
         $result = $this->triggerGet($apiRequest);
 
         if ($result->getReturnCode() == 200) {
-            $rawData = $result->getData()[CloseIoResponse::GET_ALL_RESPONSE_LEADS_KEY];
+            $rawData = $result->getData()[CloseIoResponse::GET_ALL_RESPONSE_DATA_KEY];
             foreach ($rawData as $status) {
                 $statuses[] = new OpportunityStatus($status);
             }
