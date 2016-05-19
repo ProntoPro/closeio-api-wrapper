@@ -104,7 +104,7 @@ class CloseIoApiWrapper
     }
 
     /**
-     * @return OpportunityStatusApi
+     * @return ActivityApi
      * @throws Library\Exception\ApiNotFoundException
      */
     public function getActivityApi()
