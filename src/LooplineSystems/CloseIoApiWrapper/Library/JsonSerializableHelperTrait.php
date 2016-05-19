@@ -12,12 +12,13 @@ namespace LooplineSystems\CloseIoApiWrapper\Library;
 
 trait JsonSerializableHelperTrait
 {
-
     /**
      * @return array
      */
     public function jsonSerialize()
     {
-        return array_filter(get_object_vars($this));
+        return array_map(function ($value) {
+            return $value instanceof \DateTime ? $value->format('c') : $value;
+        }, array_filter(get_object_vars($this)));
     }
 }
