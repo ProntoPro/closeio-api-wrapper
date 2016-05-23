@@ -33,15 +33,21 @@ class OpportunityApi extends AbstractApi
         ];
     }
 
-    /**
-     * @return Opportunity[]
-     */
     public function getAllOpportunities()
+    {
+        return $this->getAllOpportunitiesWithQueryParams();
+    }
+
+    /**
+     * @param array $queryParams
+     * @return \LooplineSystems\CloseIoApiWrapper\Model\Opportunity[]
+     */
+    public function getAllOpportunitiesWithQueryParams($queryParams = [])
     {
         /** @var Opportunity[] $opportunities */
         $opportunities = array();
 
-        $apiRequest = $this->prepareRequest('get-opportunities');
+        $apiRequest = $this->prepareRequest('get-opportunities', null, [], $queryParams);
 
         /** @var CloseIoResponse $result */
         $result = $this->triggerGet($apiRequest);
