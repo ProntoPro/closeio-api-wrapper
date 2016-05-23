@@ -79,7 +79,8 @@ class OpportunityStatusApi extends AbstractApi
 
     /**
      * @param OpportunityStatus $status
-     * @return CloseIoResponse
+     * @return OpportunityStatus|string
+     * @throws ResourceNotFoundException
      */
     public function addStatus(OpportunityStatus $status)
     {

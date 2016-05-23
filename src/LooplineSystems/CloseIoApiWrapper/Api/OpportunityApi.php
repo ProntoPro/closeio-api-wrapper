@@ -83,7 +83,8 @@ class OpportunityApi extends AbstractApi
 
     /**
      * @param Opportunity $opportunity
-     * @return CloseIoResponse
+     * @return Opportunity
+     * @throws ResourceNotFoundException
      */
     public function addOpportunity(Opportunity $opportunity)
     {
@@ -91,7 +92,14 @@ class OpportunityApi extends AbstractApi
 
         $opportunity = json_encode($opportunity);
         $apiRequest = $this->prepareRequest('add-opportunity', $opportunity);
-        return $this->triggerPost($apiRequest);
+
+        $response = $this->triggerPost($apiRequest);
+
+        if ($response->getReturnCode() == 200 && ($response->getData() !== null)) {
+            return new Opportunity($response->getData());
+        } else {
+            throw new ResourceNotFoundException();
+        }
     }
 
     /**
