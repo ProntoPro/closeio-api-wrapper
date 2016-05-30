@@ -20,7 +20,7 @@ trait JsonSerializableHelperTrait
         return array_map(function ($value) {
             return $value instanceof \DateTime ? $value->format('c') : $value;
         }, array_filter(get_object_vars($this), function ($value) {
-            return $value !== null || $value !== '';
+            return $value !== null && $value !== '';
         }));
     }
 }
