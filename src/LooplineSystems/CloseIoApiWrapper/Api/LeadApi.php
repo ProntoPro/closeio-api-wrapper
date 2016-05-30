@@ -37,7 +37,7 @@ class LeadApi extends AbstractApi
             'get-lead-query' => '/lead/',
             'update-lead' => '/lead/[:id]/',
             'delete-lead' => '/lead/[:id]/',
-            'merge-leads' => '/lead/merge',
+            'merge-leads' => '/lead/merge/',
         ];
     }
 
@@ -250,7 +250,7 @@ class LeadApi extends AbstractApi
      * @param Lead $destination the lead to merge the $source with
      *
      * @return CloseIoResponse
-     * 
+     *
      * @throws InvalidParamException in case of invalid lead IDs
      * @throws ResourceNotFoundException in case of merge fail
      */
