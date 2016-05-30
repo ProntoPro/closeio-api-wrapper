@@ -37,6 +37,7 @@ class LeadApi extends AbstractApi
             'get-lead-query' => '/lead/',
             'update-lead' => '/lead/[:id]/',
             'delete-lead' => '/lead/[:id]/',
+            'merge-leads' => '/lead/merge',
         ];
     }
 
@@ -242,6 +243,35 @@ class LeadApi extends AbstractApi
         }
 
         return $leads;
+    }
+
+    /**
+     * @param Lead $source the lead to be merged (and deleted)
+     * @param Lead $destination the lead to merge the $source with
+     *
+     * @return CloseIoResponse
+     * 
+     * @throws InvalidParamException in case of invalid lead IDs
+     * @throws ResourceNotFoundException in case of merge fail
+     */
+    public function mergeLeads(Lead $source, Lead $destination)
+    {
+        if (empty($source->getId()) or empty($destination->getId())) {
+            throw new InvalidParamException('You need to specify two already existing leads in order to merge them');
+        }
+
+        $apiRequest = $this->prepareRequest('merge-leads', json_encode([
+            'destination' => $destination->getId(),
+            'source' => $destination->getId(),
+        ]));
+
+        $result = $this->triggerPost($apiRequest);
+
+        if ($result->getReturnCode() !== 200) {
+            throw new ResourceNotFoundException();
+        }
+
+        return $result;
     }
 
     /**
