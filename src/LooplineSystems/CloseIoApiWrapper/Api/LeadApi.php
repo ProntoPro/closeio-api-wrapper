@@ -262,7 +262,7 @@ class LeadApi extends AbstractApi
 
         $apiRequest = $this->prepareRequest('merge-leads', json_encode([
             'destination' => $destination->getId(),
-            'source' => $destination->getId(),
+            'source' => $source->getId(),
         ]));
 
         $result = $this->triggerPost($apiRequest);
