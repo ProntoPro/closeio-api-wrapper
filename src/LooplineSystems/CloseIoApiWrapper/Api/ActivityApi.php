@@ -34,6 +34,7 @@ class ActivityApi extends AbstractApi
      * @param \DateTime|null $from
      * @param \DateTime|null $to
      * @param string|null $leadId
+     * @return Activity[]|\Generator
      */
     public function getAllCallsBetween(\DateTime $from = null, \DateTime $to = null, $leadId)
     {
