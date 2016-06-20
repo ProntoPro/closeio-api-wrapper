@@ -36,7 +36,7 @@ class ActivityApi extends AbstractApi
      * @param string|null $leadId
      * @return Activity[]|\Generator
      */
-    public function getAllCallsBetween(\DateTime $from = null, \DateTime $to = null, $leadId)
+    public function getAllCallsBetween(\DateTime $from = null, \DateTime $to = null, $leadId = null)
     {
         $query = [];
         if ($from) {
