@@ -85,6 +85,8 @@ class OpportunityApi extends AbstractApi
                 '_skip' => $page * $limit,
             ]));
 
+            $page++;
+
             $result = $this->triggerGet($apiRequest);
 
             if ($result->getReturnCode() === 200) {
