@@ -61,6 +61,11 @@ class OpportunityApi extends AbstractApi
         return $opportunities;
     }
 
+    /**
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return Opportunity[]|\Generator
+     */
     public function getAllOpportunitiesBetween(\DateTime $from, \DateTime $to)
     {
         $query = [
