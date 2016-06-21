@@ -61,6 +61,38 @@ class OpportunityApi extends AbstractApi
         return $opportunities;
     }
 
+    public function getAllOpportunitiesBetween(\DateTime $from, \DateTime $to)
+    {
+        $query = [
+            'date_created_gte' => $from->format(DATE_ISO8601),
+            'date_created_lte' => $to->format(DATE_ISO8601),
+        ];
+
+        $limit = 100;
+        $page = 0;
+
+        do {
+            $continue = false;
+            $count = 0;
+
+            $apiRequest = $this->prepareRequest('get-opportunities', null, [], array_merge($query, [
+                '_limit' => $limit,
+                '_skip' => $page * $limit,
+            ]));
+
+            $result = $this->triggerGet($apiRequest);
+
+            if ($result->getReturnCode() === 200) {
+                foreach ($result->getData()[CloseIoResponse::GET_ALL_RESPONSE_DATA_KEY] as $data) {
+                    $count++;
+                    yield new Opportunity($data);
+                }
+
+                $continue = $result->getData()[CloseIoResponse::GET_ALL_RESPONSE_HAS_MORE_KEY];
+            }
+        } while ($continue && $count === $limit);
+    }
+
     /**
      * @param $id
      * @return Opportunity
