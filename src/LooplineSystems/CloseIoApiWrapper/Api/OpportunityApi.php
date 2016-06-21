@@ -69,8 +69,8 @@ class OpportunityApi extends AbstractApi
     public function getAllOpportunitiesBetween(\DateTime $from, \DateTime $to)
     {
         $query = [
-            'date_created_gte' => $from->format(DATE_ISO8601),
-            'date_created_lte' => $to->format(DATE_ISO8601),
+            'date_created__gte' => $from->format(DATE_ISO8601),
+            'date_created__lte' => $to->format(DATE_ISO8601),
         ];
 
         $limit = 100;
