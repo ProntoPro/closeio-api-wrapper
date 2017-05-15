@@ -52,7 +52,7 @@ trait ObjectHydrateHelperTrait
                 } else {
                     // check if setter method exists that doesn't match Zend filter format
                     if (in_array($setter, array_keys($method_mapper))) {
-                        $this->$method_mapper[$setter]($value);
+                        $this->{$method_mapper[$setter]}($value);
                     } else {
                         // trying to set a value for a non-property
 //                        throw new UndefinedMethodException(get_class($this).'::'.$setter);
