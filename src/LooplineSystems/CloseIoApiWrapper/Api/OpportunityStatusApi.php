@@ -35,7 +35,7 @@ class OpportunityStatusApi extends AbstractApi
     }
 
     /**
-     * @return Status[]
+     * @return OpportunityStatus[]
      */
     public function getAllStatuses()
     {
@@ -79,7 +79,7 @@ class OpportunityStatusApi extends AbstractApi
 
     /**
      * @param OpportunityStatus $status
-     * @return OpportunityStatus|string
+     * @return OpportunityStatus
      * @throws ResourceNotFoundException
      */
     public function addStatus(OpportunityStatus $status)
@@ -158,7 +158,7 @@ class OpportunityStatusApi extends AbstractApi
     }
 
     /**
-     * @param Status $status
+     * @param OpportunityStatus $status
      * @return bool
      */
     public function validateStatusForPost(OpportunityStatus $status)
