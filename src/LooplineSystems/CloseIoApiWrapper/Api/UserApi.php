@@ -38,7 +38,9 @@ class UserApi extends AbstractApi
         /** @var User[] $users */
         $users = array();
 
-        $apiRequest = $this->prepareRequest('get-users');
+        $query = ['_limit' => 500, '_skip' => 0];
+
+        $apiRequest = $this->prepareRequest('get-users', null, [], $query);
 
         /** @var CloseIoResponse $result */
         $result = $this->triggerGet($apiRequest);
