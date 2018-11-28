@@ -48,7 +48,7 @@ class ActivityApi extends AbstractApi
         }
 
         if ($leadId) {
-            $query['leadId'] = $leadId;
+            $query['lead_id'] = $leadId;
         }
 
         $limit = 100;
